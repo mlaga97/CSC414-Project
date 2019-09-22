@@ -1,0 +1,44 @@
+version: '3'
+services:
+    db:
+        image: mariadb:10.3.7
+        volumes:
+            - db-volume:/var/lib/mysql
+            - ./dump.sql:/docker-entrypoint-initdb.d/init.sql
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: dev
+            MYSQL_USER: testing
+            MYSQL_PASSWORD: insecure_ZooT5pie
+        ports:
+            - "3306:3306"
+    lamp-backend:
+        build: lamp-backend
+        volumes:
+            - ./lamp-backend/src:/var/www/html
+            - webpack-build:/var/www/html/redux
+    react-frontend:
+        build: react-frontend
+        user: ${UID}
+        environment:
+            - "REACT_APP_ENVIRONMENT=development"
+            - "REACT_APP_API_BASE_URL=https://localhost/api/v1/"
+            - "PUBLIC_URL=https://localhost/redux/"
+        volumes:
+            - ./react-frontend:/react
+            - webpack-build:/react/build
+            - node-modules:/react/node_modules
+        ports:
+            - "3000:3000"
+    haproxy:
+        image: haproxy:1.8-alpine
+        volumes:
+            - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
+            - ./bundle.pem:/etc/ssl/xip.io/xip.io.pem
+        ports:
+            - "80:80"
+            - "443:443"
+volumes:
+    db-volume:
+    webpack-build:
+    node-modules:
