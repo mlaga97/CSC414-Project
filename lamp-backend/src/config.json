@@ -1,0 +1,6 @@
+{
+  "db.server": "db",
+  "db.user": "testing",
+  "db.password": "insecure_ZooT5pie",
+  "db.database": "dev"
+}
