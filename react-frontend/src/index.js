@@ -1,12 +1,31 @@
+// Library imports
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import { Provider } from 'react-redux';
+import axios from 'axios';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+// Bootstrap stuff
+import 'bootstrap/dist/css/bootstrap.min.css';
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+// Configuration stuff
+import configureStore from './configureStore';
+
+// Components
+import AuthRedirector from './components';
+
+// Axios configuration
+// TODO: Somewhere else?
+axios.defaults.withCredentials = true;
+axios.defaults.baseURL = process.env.REACT_APP_API_BASE_URL;
+
+// Redux Store
+const store = configureStore();
+
+// Do the routing and then render
+ReactDOM.render(
+  <Provider store={store}>
+    <AuthRedirector />
+  </Provider>
+  ,
+  document.getElementById('root'),
+);
