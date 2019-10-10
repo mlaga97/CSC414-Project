@@ -49,6 +49,7 @@ $router->map('GET', '/', function() {
 
 // Add assorted routes
 require_once './user.php';
+require_once './post.php';
 
 // Documentation route
 $router->map('OPTIONS', '/', function() {
