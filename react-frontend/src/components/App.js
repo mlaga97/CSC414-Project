@@ -1,7 +1,11 @@
 // Library imports
 import React from 'react';
 import { connect } from 'react-redux';
-import {Button} from 'react-bootstrap';
+import { Navbar, Nav, NavItem, Button, Card, Container, Row, Col } from 'react-bootstrap';
+
+// Components
+import Feed from './Feed';
+import PostForm from './PostForm';
 
 // Actions
 import actions from '../actions';
@@ -9,13 +13,29 @@ import actions from '../actions';
 class App extends React.Component {
   render() {
     return <div>
-      <p>Hello, world!</p>
+      <Navbar bg="dark" variant="dark" fixed='top'>
+        <Navbar.Brand>BananaNet</Navbar.Brand>
+        <Navbar.Toggle />
+        <Navbar.Collapse>
+          <Nav>
+            <Button onClick={() => {
+              this.props.dispatch({
+                type: actions.auth.logout.requested,
+              });
+            }}>Log Out</Button>
+          </Nav>
+        </Navbar.Collapse>
+      </Navbar>
 
-      <Button onClick={() => {
-        this.props.dispatch({
-          type: actions.auth.logout.requested,
-        });
-      }}>Log Out</Button>
+      <Container style={{'marginTop': '60px'}}>
+        <Row>
+          <Col>
+            <PostForm />
+            <Feed />
+          </Col>
+        </Row>
+      </Container>
+
     </div>
   }
 }

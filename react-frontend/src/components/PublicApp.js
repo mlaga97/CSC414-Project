@@ -14,7 +14,7 @@ const PublicApp = () => {
 
   return <BrowserRouter basename={basename}>
     <Navbar bg="dark" variant="dark">
-      <Navbar.Brand>CreativeNameHere</Navbar.Brand>
+      <Navbar.Brand>BananaNet</Navbar.Brand>
       <Navbar.Toggle />
       <Navbar.Collapse>
         <Nav>

@@ -13,6 +13,15 @@ $router->map('OPTIONS', '/auth', function() {
 
 // Present a limited feature set if the user is not logged in
 if(!isset($_SESSION['status']) || $_SESSION['status'] != 'authorized') {
+  // TODO: Remove this hack
+  $router->map('OPTIONS', '/post', function() {
+    jsonResponse([
+      '/' => 'Show list of all valid post IDs',
+      '/all' => 'Shows all post data',
+      '/[:id]' => 'Show post data for a particular post ID',
+    ]);
+  });
+
   $router->map('GET', '/auth', function() {
     jsonResponse(false);
   });
