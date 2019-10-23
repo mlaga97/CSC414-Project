@@ -7,7 +7,9 @@
 ## Development Environment Setup (Ubuntu 16.04 and Ubuntu 18.04)
 ```
 # Clone Repository
-git clone https://github.com/mlaga97/CSC414-Project
+git clone https://github.com/mlaga97/csc414-roject
+
+cd csc414-project
 
 # Start the testing environment
 sudo docker-compose up
