@@ -6,10 +6,9 @@ import actions from '../../actions';
 
 // Reducers
 import all from './all';
-import list from './list';
-//import post from './post';
+import post from './post';
 
 export default combineReducers({
   all,
-  //post, // TODO: Add post reducer
+  post, // TODO: Add post reducer
 });

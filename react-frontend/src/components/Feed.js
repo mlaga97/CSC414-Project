@@ -22,10 +22,6 @@ class Feed extends React.Component {
   }
 
   render() {
-    if (!this.props.post.list) {
-      return <div className='content-loading'>Retrieving post list...</div>;
-    }
-
     if (!this.props.post.all) {
       return <div className='content-loading'>Retrieving posts...</div>;
     }
@@ -34,6 +30,9 @@ class Feed extends React.Component {
       {
         Object.keys(this.props.post.all).reverse().map((postID) => {
           const post = this.props.post.all[postID];
+
+          if(!post)
+            return null;
 
           if(!post.data)
             return null;
