@@ -10,7 +10,9 @@ CREATE TABLE `users` (
 
 /* Add default users */
 INSERT INTO `users` (`id`, `username`, `password`, `data`) VALUES
-  ('1', 'test', 'test', '{}');
+  ('1', 'test1', 'test1', '{}'),
+  ('2', 'test2', 'test2', '{}'),
+  ('3', 'test3', 'test3', '{}');
 
 /* Add posts table */
 DROP TABLE IF EXISTS `posts`;
