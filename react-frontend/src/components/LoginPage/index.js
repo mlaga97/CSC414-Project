@@ -25,37 +25,6 @@ class LoginForm extends React.Component {
       },
     });
   }
-  
-  /*
-    <div className='container'>
-      <form onSubmit={this.handleSubmit} className='login' autoComplete='off'>
-        <ErrorMessage auth={this.props.auth} />
-        <Panel>
-          <Panel.Heading>Login</Panel.Heading>
-          <Panel.Body>
-            <Grid>
-              <Row>
-                <Col sm={4} smOffset={4}>
-                  <Username />
-                </Col>
-              </Row>
-              <Row>
-                <Col sm={4} smOffset={4}>
-                  <Password />
-                </Col>
-              </Row>
-            </Grid>
-          </Panel.Body>
-        </Panel>
-        <Grid>
-          <Col sm={4} smOffset={4}>
-            <LoginButton />
-          </Col>
-        </Grid>
-      </form>
-    </div>
-
-  */
 
   // TODO: Add back styling
   render = () => (
