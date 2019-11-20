@@ -20,10 +20,10 @@ const PublicApp = () => {
       <Navbar.Toggle />
       <Navbar.Collapse>
         <Nav>
-          <Nav.Link href='/'>Login</Nav.Link>
+          <Nav.Link href='./'>Login</Nav.Link>
         </Nav>
         <Nav>
-          <Nav.Link href='/registerLink'>Register</Nav.Link>
+          <Nav.Link href='./registerLink'>Register</Nav.Link>
         </Nav>
       </Navbar.Collapse>
     </Navbar>

@@ -18,6 +18,9 @@ start () {
 
 build () {
   npm run-script build
+  
+  # Add .htaccess for rewrite rules
+  cp template.htaccess build/.htaccess
 }
 
 lint () {
