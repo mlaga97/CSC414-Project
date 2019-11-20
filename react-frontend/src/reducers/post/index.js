@@ -1,0 +1,14 @@
+// Library imports
+import { combineReducers } from 'redux';
+
+// Get action list
+import actions from '../../actions';
+
+// Reducers
+import all from './all';
+import post from './post';
+
+export default combineReducers({
+  all,
+  post, // TODO: Add post reducer
+});

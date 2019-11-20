@@ -7,6 +7,8 @@ import { IndexLinkContainer } from 'react-router-bootstrap';
 // Components
 import Footer from './Footer';
 import LoginPage from './LoginPage';
+import RegistrationPage from './RegistrationPage';
+import FinishRegistration from './FinishRegistration';
 
 // TODO: Show a landing page for non-logged-in users
 const PublicApp = () => {
@@ -14,11 +16,14 @@ const PublicApp = () => {
 
   return <BrowserRouter basename={basename}>
     <Navbar bg="dark" variant="dark">
-      <Navbar.Brand>CreativeNameHere</Navbar.Brand>
+      <Navbar.Brand>BananaNet</Navbar.Brand>
       <Navbar.Toggle />
       <Navbar.Collapse>
         <Nav>
-          <Nav.Link href='/'>Login</Nav.Link>
+          <Nav.Link href='./'>Login</Nav.Link>
+        </Nav>
+        <Nav>
+          <Nav.Link href='./registerLink'>Register</Nav.Link>
         </Nav>
       </Navbar.Collapse>
     </Navbar>
@@ -26,6 +31,8 @@ const PublicApp = () => {
     <div className='page'>
       <Route exact path='/' component={LoginPage} />
       <Route exact path='/login' component={LoginPage} />
+      <Route exact path='/registerLink' component={RegistrationPage} />
+      <Route exact path='/register' component={FinishRegistration} />
     </div>
   </BrowserRouter>;
 };

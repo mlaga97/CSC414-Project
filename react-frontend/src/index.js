@@ -21,6 +21,8 @@ import './style.css';
 axios.defaults.withCredentials = true;
 axios.defaults.baseURL = process.env.REACT_APP_API_BASE_URL;
 
+document.title = 'BananaNet';
+
 // Redux Store
 const store = configureStore();
 

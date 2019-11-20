@@ -44,6 +44,33 @@ function changePassword($userID, $password, $newPassword) {
   return 'Incorrect username.';
 }
 
+// TODO: Get registration token
+// TODO: Document
+function registerUser($username, $password) {
+  global $log, $mysqli;
+
+  $username = $mysqli->real_escape_string($username);
+  $password = $mysqli->real_escape_string($password);
+
+  $hash = password_hash($password, PASSWORD_BCRYPT);
+
+  $query = "
+    INSERT INTO users (
+      username,
+      password
+    ) VALUES (
+      '$username',
+      '$hash'
+    )
+  ";
+
+  $result = $mysqli->query($query);
+
+  if (!result) return 'Could not add user!';
+
+  return $mysqli->insert_id;
+}
+
 /**
  * Attempts to login with username and password.
  * 
