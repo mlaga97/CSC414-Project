@@ -25,7 +25,52 @@ const Email = () => (
   />
 );
 
+const RegistrationForm = ({
+  onSubmit,
+}) => (
+  <Container>
+    <Row>
+      <Col>
+        <Card >
+          <div class='container'>
+            <form onSubmit={onSubmit} className='login' autoComplete='off'>
+              {/* <ErrorMessage auth={this.props.auth} /> */}
+              <Email />
+              <FormGroup controlId='formLoginSubmit' className='form-group-clear-style'>
+                <FormControl type='submit' name='Send Confirmation Email' value='Send Confirmation Email' />
+              </FormGroup>
+            </form>
+          </div>
+        </Card>
+      </Col>
+    </Row>
+  </Container>
+);
+
+const EmailConfirmationSent = ({email}) => (
+  <Container>
+    <Row>
+      <Col>
+        <Card >
+          <div class='container'>
+            <h3>Email confirmation sent to {email}!</h3>
+          </div>
+        </Card>
+      </Col>
+    </Row>
+  </Container>
+);
+
 class LoginForm extends React.Component {
+  constructor() {
+    super();
+
+    this.state = {
+      submitted: false,
+      email: '',
+    };
+  }
+
   handleSubmit = (event) => {
     event.preventDefault();
 
@@ -36,28 +81,25 @@ class LoginForm extends React.Component {
         email: event.target.email.value,
       },
     });
+
+    // Store email for next stage
+    this.setState({
+      email: event.target.email.value,
+    });
+
+    // TODO: Actually do correctly
+    this.interval = setTimeout(() => this.setState({
+      submitted: true,
+    }), 100);
   }
 
   // TODO: Add back styling
-  render = () => (
-    <Container>
-      <Row>
-        <Col>
-          <Card >
-            <div class='container'>
-              <form onSubmit={this.handleSubmit} className='login' autoComplete='off'>
-                {/* <ErrorMessage auth={this.props.auth} /> */}
-                <Email />
-                <FormGroup controlId='formLoginSubmit' className='form-group-clear-style'>
-                  <FormControl type='submit' name='Register' value='Register' />
-                </FormGroup>
-              </form>
-            </div>
-          </Card>
-        </Col>
-      </Row>
-    </Container>
-  )
+  render() {
+    if (this.state.submitted)
+      return <EmailConfirmationSent email={this.state.email} />
+
+    return <RegistrationForm onSubmit={this.handleSubmit} />
+  }
 }
 
 export default connect(

@@ -44,21 +44,87 @@ function changePassword($userID, $password, $newPassword) {
   return 'Incorrect username.';
 }
 
-// TODO: Get registration token
-// TODO: Document
-function registerUser($username, $password) {
+function registrationLink($email) {
   global $log, $mysqli;
 
+  $email = $mysqli->real_escape_string($email);
+
+  /*
+  // Test if email already in use
+  $query = "SELECT email FROM users WHERE email='$email'";
+  if ($result = $mysqli->query($query))
+    while ($row = $result->fetch_assoc())
+      if ($row['email'] == $email)
+        return 'Email already in use!';
+  */
+
+  $payload = [
+    'email' => $email,
+    'timestamp' => time(),
+    'uuid' => guidv4(),
+  ];
+
+  // TODO: Actually replace with JWT
+  $jwt = base64_encode(json_encode($payload));
+
+  // Log registration token
+  // TODO: Better
+  $query = "INSERT INTO registration ( token ) VALUES ( '$jwt' )";
+  $result = $mysqli->query($query);
+
+  if (!$result) return 'Could not send registration link!';
+
+  mail($email, 'BananaNet Registration Link', 'https://banananet.xyz/register?token=' . $jwt, 'From: banananet.noreply@gmail.com');
+
+  return $mysqli->insert_id;
+}
+
+// TODO: Get registration token
+// TODO: Document
+function registerUser($token, $username, $password) {
+  global $log, $mysqli;
+
+  // TODO: Actually replace with JWT
+  $payload = json_decode(base64_decode($token));
+  $email = $payload->email;
+
+  $token = $mysqli->real_escape_string($token);
+  $email = $mysqli->real_escape_string($email);
   $username = $mysqli->real_escape_string($username);
   $password = $mysqli->real_escape_string($password);
 
   $hash = password_hash($password, PASSWORD_BCRYPT);
 
+  // TODO: Test if token is valid
+  $query = "SELECT token FROM registration WHERE token='$token'";
+  error_log($query);
+  $result = $mysqli->query($query);
+  if (!$result)
+    return 'Unrecognized token!';
+
+  // Test if username or email is already taken
+  $query = "SELECT username, email FROM users WHERE username='$username' OR email='$email'";
+  if ($result = $mysqli->query($query)) {
+    $emailInUse = false;
+    $usernameInUse = false;
+
+    while ($row = $result->fetch_assoc()) {
+      if ($row['email'] == $email) $emailInUse = true;
+      if ($row['username'] == $username) $usernameInUse = true;
+    }
+
+    if ($emailInUse) return 'Email already in use!';
+    if ($usernameInUse) return 'Username already in use!';
+  }
+
+  // Actually add the user
   $query = "
     INSERT INTO users (
+      email,
       username,
       password
     ) VALUES (
+      '$email',
       '$username',
       '$hash'
     )
@@ -66,7 +132,7 @@ function registerUser($username, $password) {
 
   $result = $mysqli->query($query);
 
-  if (!result) return 'Could not add user!';
+  if (!$result) return 'Could not add user!';
 
   return $mysqli->insert_id;
 }

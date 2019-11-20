@@ -30,9 +30,9 @@ const PublicApp = () => {
 
     <div className='page'>
       <Route exact path='/' component={LoginPage} />
-      <Route exact path='/login' component={LoginPage} />
-      <Route exact path='/registerLink' component={RegistrationPage} />
-      <Route exact path='/register' component={FinishRegistration} />
+      <Route path='/login' component={LoginPage} />
+      <Route path='/registerLink' component={RegistrationPage} />
+      <Route path='/register' component={FinishRegistration} />
     </div>
   </BrowserRouter>;
 };
