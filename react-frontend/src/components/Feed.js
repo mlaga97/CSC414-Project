@@ -16,11 +16,9 @@ class Feed extends React.Component {
       type: actions.post.all.requested,
     });
 
-    /*
     this.interval = setInterval(() => this.props.dispatch({
       type: actions.post.all.requested,
-    }), 100);
-    */
+    }), 1000);
   }
 
   render() {
