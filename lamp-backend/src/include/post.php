@@ -13,6 +13,9 @@ function DB2Post($postRow) {
 function postPost($userID, $postData) {
   global $mysqli;
 
+  // Add server-side metadata
+  $postData['serverTime'] = round(microtime(true)*1000);
+
   $postData = json_encode($postData);
 
   // Escape each string in place to avoid SQL injection

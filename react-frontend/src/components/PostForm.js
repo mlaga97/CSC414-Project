@@ -26,6 +26,7 @@ class PostForm extends React.Component {
       type: actions.post.post.requested,
       data: {
         body: this.state.value,
+        clientTime: Date.now(),
       },
     });
 
