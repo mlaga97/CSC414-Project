@@ -9,7 +9,7 @@ import Post from './Post';
 // Actions
 import actions from '../actions';
 
-class Feed extends React.Component {
+class UserPage extends React.Component {
   componentDidMount() {
     this.props.dispatch({
       type: actions.post.all.requested,
@@ -26,10 +26,11 @@ class Feed extends React.Component {
     }
 
     const posts = this.props.post.all;
+    const username = this.props.match.params.username;
 
     return <React.Fragment>
       {
-        Object.keys(posts).filter((postID) => posts[postID] && !posts[postID].data.parent).reverse().map((postID) => {
+        Object.keys(posts).filter((postID) => posts[postID] && posts[postID].username == username).reverse().map((postID) => {
           return <Post 
             post={posts[postID]}
             posts={posts}
@@ -47,4 +48,4 @@ export default connect(
   dispatch => ({
     dispatch,
   }),
-)(Feed);
+)(UserPage);

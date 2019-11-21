@@ -1,10 +1,15 @@
 // Library imports
 import React from 'react';
 import { connect } from 'react-redux';
+import { Route, BrowserRouter } from 'react-router-dom';
 import { Navbar, Nav, NavItem, Button, Card, Container, Row, Col } from 'react-bootstrap';
+import { IndexLinkContainer } from 'react-router-bootstrap';
 
 // Components
 import Feed from './Feed';
+import TagPage from './TagPage';
+import UserPage from './UserPage';
+import PostPage from './PostPage';
 import PostForm from './PostForm';
 
 // Actions
@@ -12,8 +17,10 @@ import actions from '../actions';
 
 class App extends React.Component {
   render() {
-    return <div>
-      <Navbar bg="dark" variant="dark" fixed='top'>
+    const basename = process.env.PUBLIC_URL.replace(/(^\w+:|^)\/\/.*?\//, '');
+
+    return <BrowserRouter basename={basename}>
+      <Navbar bg="dark" variant="dark">
         <Navbar.Brand>BananaNet</Navbar.Brand>
         <Navbar.Toggle />
         <Navbar.Collapse>
@@ -27,16 +34,22 @@ class App extends React.Component {
         </Navbar.Collapse>
       </Navbar>
 
-      <Container style={{'marginTop': '60px'}}>
-        <Row>
-          <Col>
-            <PostForm />
-            <Feed />
-          </Col>
-        </Row>
-      </Container>
-
-    </div>
+      <div className='page'>
+        <Route exact path='/'>
+          <Container style={{'marginTop': '60px'}}>
+            <Row>
+              <Col>
+                <PostForm />
+                <Feed />
+              </Col>
+            </Row>
+          </Container>
+        </Route>
+        <Route path='/u/:username' component={UserPage} />
+        <Route path='/p/:postID' component={PostPage} />
+        <Route path='/t/:tag' component={TagPage} />
+      </div>
+    </BrowserRouter>
   }
 }
 

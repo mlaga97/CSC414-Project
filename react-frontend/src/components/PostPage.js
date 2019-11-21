@@ -9,7 +9,7 @@ import Post from './Post';
 // Actions
 import actions from '../actions';
 
-class Feed extends React.Component {
+class PostPage extends React.Component {
   componentDidMount() {
     this.props.dispatch({
       type: actions.post.all.requested,
@@ -26,16 +26,13 @@ class Feed extends React.Component {
     }
 
     const posts = this.props.post.all;
+    const postID = this.props.match.params.postID;
 
     return <React.Fragment>
-      {
-        Object.keys(posts).filter((postID) => posts[postID] && !posts[postID].data.parent).reverse().map((postID) => {
-          return <Post 
-            post={posts[postID]}
-            posts={posts}
-          />
-        })
-      }
+      <Post 
+        post={posts[postID]}
+        posts={posts}
+      />
     </React.Fragment>
   }
 }
@@ -47,4 +44,4 @@ export default connect(
   dispatch => ({
     dispatch,
   }),
-)(Feed);
+)(PostPage);

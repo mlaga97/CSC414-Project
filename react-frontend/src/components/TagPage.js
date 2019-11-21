@@ -9,7 +9,7 @@ import Post from './Post';
 // Actions
 import actions from '../actions';
 
-class Feed extends React.Component {
+class TagPage extends React.Component {
   componentDidMount() {
     this.props.dispatch({
       type: actions.post.all.requested,
@@ -26,10 +26,11 @@ class Feed extends React.Component {
     }
 
     const posts = this.props.post.all;
+    const tag = this.props.match.params.tag; // TODO: Multi-tag matching
 
     return <React.Fragment>
       {
-        Object.keys(posts).filter((postID) => posts[postID] && !posts[postID].data.parent).reverse().map((postID) => {
+        Object.keys(posts).filter((postID) => posts[postID] && !posts[postID].data.parent && posts[postID].data.tag).reverse().map((postID) => {
           return <Post 
             post={posts[postID]}
             posts={posts}
@@ -47,4 +48,4 @@ export default connect(
   dispatch => ({
     dispatch,
   }),
-)(Feed);
+)(TagPage);

@@ -6,7 +6,7 @@ import { Card, Form, Button } from 'react-bootstrap';
 // Actions
 import actions from '../actions';
 
-class PostForm extends React.Component {
+class CommentForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {value: ''};
@@ -27,6 +27,7 @@ class PostForm extends React.Component {
       data: {
         body: this.state.value,
         clientTime: Date.now(),
+        parent: this.props.parent,
       },
     });
 
@@ -54,4 +55,4 @@ export default connect(
   dispatch => ({
     dispatch,
   }),
-)(PostForm);
+)(CommentForm);
