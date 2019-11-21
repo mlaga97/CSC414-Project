@@ -3,8 +3,44 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Card, Container, Row, Col } from 'react-bootstrap';
 
+
+// Components
+import PostForm from './PostForm';
+
 // Actions
 import actions from '../actions';
+
+const Post = ({
+  post,
+  posts,
+}) => {
+  if(!post)
+    return null;
+
+  if(!post.data)
+    return null;
+
+  if(!post.data.body)
+    return null;
+
+  return <Card>
+    <Card.Body>
+      <Card.Title>
+        <span>{post.username}</span><span style={{'fontSize': '14px', 'color': '#999999'}}>#{post.userID}</span>
+        <span style={{'float': 'right', 'fontSize': '14px', 'color': '#aaaaaa'}} >id:{post.id}</span>
+      </Card.Title>
+      <Card.Text>{post.data.body}</Card.Text>
+      {
+        Object.keys(posts).filter((postID) => posts[postID].data.parent == post.id).map((postID) => <Post
+          post={posts[postID]}
+          posts={posts}
+        />)
+      }
+      <PostForm parent={post.id} />
+    </Card.Body>
+  </Card>
+}
+
 
 class Feed extends React.Component {
   componentDidMount() {
@@ -18,7 +54,7 @@ class Feed extends React.Component {
 
     this.interval = setInterval(() => this.props.dispatch({
       type: actions.post.all.requested,
-    }), 1000);
+    }), 5000);
   }
 
   render() {
@@ -26,31 +62,15 @@ class Feed extends React.Component {
       return <div className='content-loading'>Retrieving posts...</div>;
     }
 
+    const posts = this.props.post.all;
+
     return <React.Fragment>
       {
-        Object.keys(this.props.post.all).reverse().map((postID) => {
-          const post = this.props.post.all[postID];
-
-          if(!post)
-            return null;
-
-          if(!post.data)
-            return null;
-
-          if(!post.data.body)
-            return null;
-
-          return <div style={{margin: '10px'}}>
-            <Card>
-              <Card.Body>
-                <Card.Title>
-                  <span>{post.username}</span><span style={{'fontSize': '14px', 'color': '#999999'}}>#{post.userID}</span>
-                  <span style={{'float': 'right', 'fontSize': '14px', 'color': '#aaaaaa'}} >id:{post.id}</span>
-                </Card.Title>
-                <Card.Text>{post.data.body}</Card.Text>
-              </Card.Body>
-            </Card>
-          </div>
+        Object.keys(posts).filter((postID) => posts[postID] && !posts[postID].data.parent).reverse().map((postID) => {
+          return <Post 
+            post={posts[postID]}
+            posts={posts}
+          />
         })
       }
     </React.Fragment>

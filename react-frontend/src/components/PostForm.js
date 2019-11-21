@@ -27,6 +27,7 @@ class PostForm extends React.Component {
       data: {
         body: this.state.value,
         clientTime: Date.now(),
+        parent: this.props.parent,
       },
     });
 
