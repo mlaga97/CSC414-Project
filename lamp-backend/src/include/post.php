@@ -42,7 +42,7 @@ function getPost($id) {
   $id = $mysqli->real_escape_string($id);
 
   // Get post
-  if($result = $mysqli->query('SELECT id, userID, data FROM posts WHERE id = "' . $id . '"')) {
+  if($result = $mysqli->query('SELECT posts.id, userID, posts.data, username FROM posts INNER JOIN users ON posts.userID=users.id AND posts.it = "' . $id . '"')) {
     $output = DB2Post($result->fetch_assoc());
     $result->close();
   }
@@ -54,7 +54,7 @@ function listPostsByID() {
   global $mysqli;
   $output = [];
 
-  if($result = $mysqli->query('SELECT id, userID, data FROM posts')) {
+  if($result = $mysqli->query('SELECT posts.id, userID, posts.data, username FROM posts INNER JOIN users ON posts.userID=users.id')) {
     while($row = $result->fetch_assoc()) {
       $output[$row['id']] = DB2Post($row);
     }

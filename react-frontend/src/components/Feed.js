@@ -46,8 +46,7 @@ class Feed extends React.Component {
             <Card>
               <Card.Body>
                 <Card.Title>
-                  {/*<span>User {post.userID}</span>*/}
-                  <span>test{post.userID}</span><span style={{'fontSize': '14px', 'color': '#999999'}}>#{post.userID}</span>
+                  <span>{post.username}</span><span style={{'fontSize': '14px', 'color': '#999999'}}>#{post.userID}</span>
                   <span style={{'float': 'right', 'fontSize': '14px', 'color': '#aaaaaa'}} >id:{post.id}</span>
                 </Card.Title>
                 <Card.Text>{post.data.body}</Card.Text>
