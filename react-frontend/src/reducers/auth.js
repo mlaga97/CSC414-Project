@@ -27,6 +27,16 @@ export default function settings(state = null, action) {
       return Object.assign({}, state, {
         status: action.data,
       });
+    
+    case actions.auth.register.succeeded:
+      return Object.assign({}, state, {
+        registerStatus: true,
+      });
+    case actions.auth.register.failed:
+      return Object.assign({}, state, {
+        registerStatus: false,
+        registerReason: action.data,
+      });
     default:
       return state;
   }

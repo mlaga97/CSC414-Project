@@ -113,8 +113,14 @@ function registerUser($token, $username, $password) {
       if ($row['username'] == $username) $usernameInUse = true;
     }
 
-    if ($emailInUse) return 'Email already in use!';
-    if ($usernameInUse) return 'Username already in use!';
+    if ($emailInUse) return [
+      'success' => false,
+      'message' => 'Email already in use!',
+    ];
+    if ($usernameInUse) return [
+      'success' => false,
+      'message' => 'Username already in use!',
+    ];
   }
 
   // Actually add the user
@@ -132,9 +138,15 @@ function registerUser($token, $username, $password) {
 
   $result = $mysqli->query($query);
 
-  if (!$result) return 'Could not add user!';
+  if (!$result) return [
+    'success' => false,
+    'message' => 'Could not add user!',
+  ];
 
-  return $mysqli->insert_id;
+  return [
+    'success' => true,
+    'message' => $mysqli->insert_id,
+  ];
 }
 
 /**

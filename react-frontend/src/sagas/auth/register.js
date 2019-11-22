@@ -15,12 +15,15 @@ import actions from '../../actions';
 export default function* login(action) {
   const { succeeded, failed } = actions.auth.register;
 
+
   try {
     const response = yield call(() => axios.post('/auth/register', action.data));
 
+    console.log(response.data);
+
     yield put({
       type: response.data.success ? succeeded : failed,
-      data: response.data,
+      data: response.data.message,
     });
   } catch (e) {
     yield put({

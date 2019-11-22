@@ -67,8 +67,13 @@ class LoginForm extends React.Component {
 
     // TODO: Actually do correctly
     this.interval = setTimeout(() => this.setState({
+      error: null,
       submitted: true,
     }), 100);
+
+    this.interval = setTimeout(() => {
+      if (this.props.auth.registerStatus) window.location.href = "./"
+    }, 1000);
   }
 
   // TODO: Add back styling
@@ -77,6 +82,8 @@ class LoginForm extends React.Component {
   render = () => {
     const URLParams = new URLSearchParams(this.props.location.search);
     let tokenData;
+
+    console.log(this.props.auth);
 
     // TODO: Redirect
     if (!URLParams.has('token'))
@@ -95,7 +102,7 @@ class LoginForm extends React.Component {
     if (!tokenData.email || !tokenData.timestamp || !tokenData.uuid)
       return 'Invalid registration token!';
 
-    if (this.state.submitted)
+    if (this.state.submitted && this.props.auth.registerStatus)
       return (
         <Container>
           <Row>
@@ -118,6 +125,7 @@ class LoginForm extends React.Component {
               <div class='container'>
                 <form onSubmit={this.handleSubmit} className='login' autoComplete='off'>
                   <ErrorMessage message={this.state.error} />
+                  <ErrorMessage message={(this.props.auth) ? this.props.auth.registerReason : null} />
                   <FocusableInput
                     type='text'
                     name='username'
