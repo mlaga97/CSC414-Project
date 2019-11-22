@@ -21,7 +21,7 @@ class App extends React.Component {
 
     return <BrowserRouter basename={basename}>
       <Navbar bg="dark" variant="dark">
-        <Navbar.Brand>BananaNet</Navbar.Brand>
+        <Navbar.Brand href='/'>BananaNet</Navbar.Brand>
         <Navbar.Toggle />
         <Navbar.Collapse>
           <Nav>

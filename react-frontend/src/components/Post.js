@@ -5,6 +5,67 @@ import { Card, Container, Row, Col } from 'react-bootstrap';
 // Components
 import CommentForm from './CommentForm';
 
+const CommentCount = ({count}) => {
+  if (count == 0)
+    return "0 replies";
+
+  if (count == 1)
+    return "1 replies";
+
+  if (count > 1)
+    return count + " replies";
+}
+
+
+// Source: https://stackoverflow.com/a/23259289
+var timeSince = function(date) {
+  if (typeof date !== 'object') {
+    date = new Date(date);
+  }
+
+  var seconds = Math.floor((new Date() - date) / 1000);
+  var intervalType;
+
+  var interval = Math.floor(seconds / 31536000);
+  if (interval >= 1) {
+    intervalType = 'year';
+  } else {
+    interval = Math.floor(seconds / 2592000);
+    if (interval >= 1) {
+      intervalType = 'month';
+    } else {
+      interval = Math.floor(seconds / 86400);
+      if (interval >= 1) {
+        intervalType = 'day';
+      } else {
+        interval = Math.floor(seconds / 3600);
+        if (interval >= 1) {
+          intervalType = "hour";
+        } else {
+          interval = Math.floor(seconds / 60);
+          if (interval >= 1) {
+            intervalType = "minute";
+          } else {
+            interval = seconds;
+            intervalType = "second";
+          }
+        }
+      }
+    }
+  }
+
+  if (interval > 1 || interval === 0) {
+    intervalType += 's';
+  }
+
+  return interval + ' ' + intervalType;
+};
+
+
+const CommentDate = ({timestamp}) => {
+  return timeSince(timestamp) + ' ago';
+}
+
 const Post = ({
   post,
   posts,
@@ -18,24 +79,50 @@ const Post = ({
   if(!post.data.body)
     return null;
 
+  const children = Object.keys(posts).filter((postID) => posts[postID].data.parent == post.id);
+
   return <Card>
     <Card.Body>
       <Card.Title>
-        <a href={'/u/' + post.username}>
-          <span>{post.username}</span><span style={{'fontSize': '14px', 'color': '#999999'}}>#{post.userID}</span>
-        </a>
-        <a href={'/p/' + post.id}>
-          <span style={{'float': 'right', 'fontSize': '14px', 'color': '#aaaaaa'}} >id:{post.id}</span>
-        </a>
+        <div style={{'margin': '10px'}}>
+          <a href={'/u/' + post.username}>
+            <span>{post.username}</span><span style={{'fontSize': '14px', 'color': '#999999'}}>#{post.userID}</span>
+          </a>
+          <span style={{'float': 'right', 'fontSize': '14px', 'color': '#aaaaaa'}} >
+            <a href='javascript:void(0)' style={{'color': '#aaaaaa'}}>
+              Report
+            </a>
+          </span>
+        </div>
       </Card.Title>
-      <Card.Text>{post.data.body}</Card.Text>
+      <Card.Text>
+        <div style={{'margin': '10px'}}>
+          <h4>
+            {post.data.body}
+          </h4>
+        </div>
+      </Card.Text>
+      <hr/>
+      <div style={{'margin': '10px'}}>
+        <span style={{'fontSize': '14px', 'color': '#aaaaaa'}} >
+          <CommentCount count={children.length} />
+        </span>
+        <span style={{'float': 'right', 'fontSize': '14px', 'color': '#aaaaaa'}} >
+          <a href={'/p/' + post.id} style={{'color': '#aaaaaa'}}>
+            <CommentDate timestamp={post.data.clientTime} />
+          </a>
+        </span>
+      </div>
+      <hr/>
+      <div style={{'margin': '10px'}}>
+        <CommentForm parent={post.id} />
+      </div>
       {
-        Object.keys(posts).filter((postID) => posts[postID].data.parent == post.id).map((postID) => <Post
+        children.map((postID) => <Post
           post={posts[postID]}
           posts={posts}
         />)
       }
-      <CommentForm parent={post.id} />
     </Card.Body>
   </Card>
 }

@@ -136,7 +136,7 @@ class LoginForm extends React.Component {
                   <FocusableInput
                     type='password'
                     name='confirm'
-                    label='Confirm'
+                    label='Confirm Password'
                     required='required'
                     controlID='formRegisterConfirm'
                   />

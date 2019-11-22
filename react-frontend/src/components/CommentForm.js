@@ -9,7 +9,10 @@ import actions from '../actions';
 class CommentForm extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {value: ''};
+    this.state = {
+      hidden: true,
+      value: ''
+    };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -35,15 +38,19 @@ class CommentForm extends React.Component {
   }
 
   render() {
-    return  <div style={{margin: '10px'}}>
-      <Card>
+    if (this.state.hidden)
+      return <div>
+        <a href='javascript:void(0)' onClick={() => this.setState({hidden: false})}>Reply</a>
+      </div>
+    return <div>
         <Form onSubmit={this.handleSubmit}>
-          <Form.Group style={{margin: '10px'}}>
+          <Form.Group>
             <Form.Control type='text' value={this.state.value} onChange={this.handleChange} />
           </Form.Group>
+          <a href='javascript:void(0)' onClick={() => this.setState({hidden: true})}>Cancel</a>
           <Button style={{margin: '10px', 'float': 'right'}} type="submit" value="Submit">Post</Button>
         </Form>
-      </Card>
+        <br/>
     </div>
   }
 }
