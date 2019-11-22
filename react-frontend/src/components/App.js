@@ -10,7 +10,7 @@ import Feed from './Feed';
 import TagPage from './TagPage';
 import UserPage from './UserPage';
 import PostPage from './PostPage';
-import PostForm from './PostForm';
+import CommentForm from './CommentForm';
 
 // Actions
 import actions from '../actions';
@@ -39,8 +39,13 @@ class App extends React.Component {
           <Container style={{'marginTop': '60px'}}>
             <Row>
               <Col>
-                <PostForm />
-                <Feed />
+                <Card>
+                  <div style={{'margin': '20px'}}>
+                    <CommentForm postform/>
+                  </div>
+                </Card>
+                <br />
+                  <Feed />
               </Col>
             </Row>
           </Container>

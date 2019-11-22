@@ -1,10 +1,20 @@
 // Library imports
 import React from 'react';
 import { connect } from 'react-redux';
-import { Card, Form, Button } from 'react-bootstrap';
+import { Alert, Card, Form, Button } from 'react-bootstrap';
 
 // Actions
 import actions from '../actions';
+
+const ErrorMessage = ({message}) => {
+  // Don't show if we don't have an error message
+  if (!message) {
+    return null;
+  }
+
+  // Show Alert containing error from server
+  return <Alert variant='danger'>{message}</Alert>;
+};
 
 class CommentForm extends React.Component {
   constructor(props) {
@@ -13,6 +23,8 @@ class CommentForm extends React.Component {
       hidden: true,
       value: ''
     };
+
+    if (this.props.postform) this.state.hidden = false;
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -24,6 +36,11 @@ class CommentForm extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
+
+    if (this.state.value.length > 1000) {
+      this.setState({error: 'Message exceeds character limit!'});
+      return
+    }
 
     this.props.dispatch({
       type: actions.post.post.requested,
@@ -42,12 +59,15 @@ class CommentForm extends React.Component {
       return <div>
         <a href='javascript:void(0)' onClick={() => this.setState({hidden: false})}>Reply</a>
       </div>
-    return <div>
+      return <div>
+        <ErrorMessage message={this.state.error} />
         <Form onSubmit={this.handleSubmit}>
           <Form.Group>
             <Form.Control type='text' value={this.state.value} onChange={this.handleChange} />
           </Form.Group>
-          <a href='javascript:void(0)' onClick={() => this.setState({hidden: true})}>Cancel</a>
+          {
+            (!this.props.postform) ? <a href='javascript:void(0)' onClick={() => this.setState({hidden: true})}>Cancel</a> : null
+          }
           <Button style={{margin: '10px', 'float': 'right'}} type="submit" value="Submit">Post</Button>
         </Form>
         <br/>

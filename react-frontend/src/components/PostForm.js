@@ -6,6 +6,16 @@ import { Card, Form, Button } from 'react-bootstrap';
 // Actions
 import actions from '../actions';
 
+const ErrorMessage = ({message}) => {
+  // Don't show if we don't have an error message
+  if (!message) {
+    return null;
+  }
+
+  // Show Alert containing error from server
+  return <Alert variant='danger'>{message}</Alert>;
+};
+
 class PostForm extends React.Component {
   constructor(props) {
     super(props);
@@ -21,6 +31,11 @@ class PostForm extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
+
+    if (this.state.value.length > 1000) {
+      this.setState({error: 'Message exceeds character limit!'});
+      return
+    }
 
     this.props.dispatch({
       type: actions.post.post.requested,
