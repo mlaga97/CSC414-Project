@@ -1,6 +1,6 @@
 // Library imports
 import React from 'react';
-import { Card, Container, Row, Col } from 'react-bootstrap';
+import { Alert, Card, Container, Row, Col } from 'react-bootstrap';
 
 // Components
 import CommentForm from './CommentForm';
@@ -66,65 +66,84 @@ const CommentDate = ({timestamp}) => {
   return timeSince(timestamp) + ' ago';
 }
 
-const Post = ({
-  post,
-  posts,
-}) => {
-  if(!post)
+const ErrorMessage = ({message, onClose}) => {
+  // Don't show if we don't have an error message
+  if (!message) {
     return null;
+  }
 
-  if(!post.data)
-    return null;
+  // Show Alert containing error from server
+  return <Alert variant='warning' dismissible onClose={onClose}>{message}</Alert>;
+};
 
-  if(!post.data.body)
-    return null;
+class Post extends React.Component {
+  constructor(props) {
+    super(props);
 
-  const children = Object.keys(posts).filter((postID) => posts[postID].data.parent == post.id);
+    this.state = {
+    };
+  }
 
-  return <Card>
-    <Card.Body>
-      <Card.Title>
+  render() {
+    const {post, posts} = this.props;
+
+    if(!post)
+      return null;
+
+    if(!post.data)
+      return null;
+
+    if(!post.data.body)
+      return null;
+
+    const children = Object.keys(posts).filter((postID) => posts[postID].data.parent == post.id);
+
+    return <Card>
+      <Card.Body>
+        <Card.Title>
+          <ErrorMessage message={this.state.error} onClose={() => this.setState({error: null})} />
+          <div style={{'margin': '10px'}}>
+            <a href={'/u/' + post.username}>
+              <span>{post.username}</span><span style={{'fontSize': '14px', 'color': '#999999'}}>#{post.userID}</span>
+            </a>
+            <span style={{'float': 'right', 'fontSize': '14px', 'color': '#aaaaaa'}} >
+              <a href='javascript:void(0)' onClick={() => this.setState({error: 'Thanks for letting us know. We will look into it soon.'})} style={{'color': '#aaaaaa'}}>
+                Report
+              </a>
+            </span>
+          </div>
+        </Card.Title>
+        <Card.Text>
+          <div style={{'margin': '10px'}}>
+            <h4>
+              {post.data.body}
+            </h4>
+          </div>
+        </Card.Text>
+        <hr/>
         <div style={{'margin': '10px'}}>
-          <a href={'/u/' + post.username}>
-            <span>{post.username}</span><span style={{'fontSize': '14px', 'color': '#999999'}}>#{post.userID}</span>
-          </a>
+          <span style={{'fontSize': '14px', 'color': '#aaaaaa'}} >
+            <CommentCount count={children.length} />
+          </span>
           <span style={{'float': 'right', 'fontSize': '14px', 'color': '#aaaaaa'}} >
-            <a href='javascript:void(0)' style={{'color': '#aaaaaa'}}>
-              Report
+            <a href={'/p/' + post.id} style={{'color': '#aaaaaa'}}>
+              <CommentDate timestamp={post.data.clientTime} />
             </a>
           </span>
         </div>
-      </Card.Title>
-      <Card.Text>
+        <hr/>
         <div style={{'margin': '10px'}}>
-          <h4>
-            {post.data.body}
-          </h4>
+          <CommentForm parent={post.id} />
         </div>
-      </Card.Text>
-      <hr/>
-      <div style={{'margin': '10px'}}>
-        <span style={{'fontSize': '14px', 'color': '#aaaaaa'}} >
-          <CommentCount count={children.length} />
-        </span>
-        <span style={{'float': 'right', 'fontSize': '14px', 'color': '#aaaaaa'}} >
-          <a href={'/p/' + post.id} style={{'color': '#aaaaaa'}}>
-            <CommentDate timestamp={post.data.clientTime} />
-          </a>
-        </span>
-      </div>
-      <hr/>
-      <div style={{'margin': '10px'}}>
-        <CommentForm parent={post.id} />
-      </div>
-      {
-        children.map((postID) => <Post
-          post={posts[postID]}
-          posts={posts}
-        />)
-      }
-    </Card.Body>
-  </Card>
+        {
+          children.map((postID) => <Post
+            post={posts[postID]}
+            posts={posts}
+          />)
+        }
+      </Card.Body>
+    </Card>
+  }
 }
 
 export default Post;
