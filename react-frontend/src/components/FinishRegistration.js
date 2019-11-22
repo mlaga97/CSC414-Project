@@ -2,7 +2,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Alert, Card, Container, Row, Col } from 'react-bootstrap';
-import { FormGroup, FormControl } from 'react-bootstrap';
+import { Form, FormGroup, FormControl } from 'react-bootstrap';
 
 // Components
 import FocusableInput from './FocusableInput';
@@ -20,21 +20,49 @@ const ErrorMessage = ({message}) => {
   return <Alert variant='danger'>{message}</Alert>;
 };
 
+const TermsAndConditions = ({hidden}) => {
+  if (hidden)
+    return null;
+
+  return <Alert variant='secondary'>
+    <h5>Terms and conditions</h5>
+    <hr/>
+    <b>General User License Agreement</b>
+    <p>You grant us a non-exclusive, transferable, sub-licensable, royalty-free, and worldwide license to host, use, distribute, disseminate, modify, run, copy, exhibit, decipher, translate, and create derivative works of your content.</p>
+    <b>Termination</b>
+    <p>You can terminate this license any time by deleting your content or account. You should know that, for technical reasons, content you delete may persist for a limited period of time in backup copies (though it will not be visible to other users). In addition, content you delete may continue to appear if you have shared it with others and they have not deleted it.</p>
+
+  </Alert>;
+}
+
 class LoginForm extends React.Component {
   constructor() {
     super();
 
     this.state = {
       submitted: false,
+      tacHidden: true,
     };
   }
 
   handleSubmit = (event) => {
     event.preventDefault();
 
+    console.log(event.target.termsAndConditions);
+
     let username = event.target.username.value;
     let confirm = event.target.confirm.value;
     let password = event.target.password.value;
+    let termsAndConditions = event.target.termsAndConditions.checked;
+
+    console.log(termsAndConditions);
+
+    if (!termsAndConditions) {
+      this.setState({
+        error: 'You must agree to the terms and conditions!',
+      });
+      return
+    }
 
     if (!username) {
       this.setState({
@@ -148,6 +176,14 @@ class LoginForm extends React.Component {
                     required='required'
                     controlID='formRegisterConfirm'
                   />
+                  <TermsAndConditions hidden={this.state.tacHidden} />
+                  <input
+                    type='checkbox'
+                    name='termsAndConditions'
+                    id='formRegisterTerms'
+                    label='test'
+                  /> I agree to the <a href='javascript:void(0)' onClick={() => this.setState({tacHidden: false})}>Terms and Conditions</a>
+                  <br/>
                   <FormGroup controlId='formLoginSubmit' className='form-group-clear-style'>
                     <FormControl type='submit' name='Register' value='Register' />
                   </FormGroup>
